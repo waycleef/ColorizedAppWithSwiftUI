@@ -96,14 +96,17 @@ struct ContentView: View {
             sliderValueBlue = 0
 
         }
+        
+        isInputActive = nil
     }
     
+
     private func next () {
         guard let currentInput = isInputActive,
               let lastIndex = Field.allCases.last?.rawValue else { return }
         
         let index = min(currentInput.rawValue + 1, lastIndex)
-        self.isInputActive = Field(rawValue: index)
+        isInputActive = Field(rawValue: index)
         
     }
     
@@ -112,7 +115,7 @@ struct ContentView: View {
               let firstIndex = Field.allCases.first?.rawValue else { return }
         
         let index = min(currentInput.rawValue - 1, firstIndex)
-        self.isInputActive = Field(rawValue: index)
+        isInputActive = Field(rawValue: index)
     }
 
 
