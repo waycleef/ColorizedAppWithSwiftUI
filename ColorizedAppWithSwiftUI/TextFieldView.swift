@@ -9,15 +9,21 @@ import SwiftUI
 
 struct TextFieldView: View {
     
-    @State private var text = ""
+    @Binding var text: Double
     
     var body: some View {
-        TextField("Enter your name", text: $text)
-    }
+        TextField("255", value: $text, formatter: NumberFormatter())
+            .multilineTextAlignment(.center)
+            .textFieldStyle(.roundedBorder)
+            .frame(width: 50)
+            .submitLabel(.done)
+            .keyboardType(.decimalPad)
+        }
 }
+    
 
 struct TextFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        TextFieldView()
+        TextFieldView(text: .constant(255))
     }
 }

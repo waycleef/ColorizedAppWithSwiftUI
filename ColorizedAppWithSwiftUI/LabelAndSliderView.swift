@@ -22,8 +22,8 @@ struct LabelAndSliderView: View {
     }
 }
 
-//struct LabelAndSliderView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LabelAndSliderView(sliderValue: <#Binding<Double>#>, color: .red)
-//    }
-//}
+struct LabelAndSliderView_Previews: PreviewProvider {
+    static var previews: some View {
+        LabelAndSliderView(sliderValue: .constant(20), color: .red)
+    }
+}

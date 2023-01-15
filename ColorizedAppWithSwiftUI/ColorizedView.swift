@@ -22,7 +22,7 @@ struct ColorizedView: View {
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct ColorizedView_Previews: PreviewProvider {
     static var previews: some View {
         ColorizedView(red: 0.88, green: 0.22, blue: 1)
     }
