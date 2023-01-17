@@ -10,118 +10,90 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var sliderValueRed: Double = Double.random(in: 0...255)
-    @State private var sliderValueGreen: Double = Double.random(in: 0...255)
-    @State private var sliderValueBlue: Double = Double.random(in: 0...255)
-        
-    @State private var showAlert = false
+    @State private var red: Double = Double.random(in: 0...255).rounded()
+    @State private var green: Double = Double.random(in: 0...255).rounded()
+    @State private var blue: Double = Double.random(in: 0...255).rounded()
+    
     @FocusState private var isInputActive: Field?
-    
-    var hasReachedEnd: Bool {
-        isInputActive == Field.allCases.last
-    }
-    
-    var hasReachedStart: Bool {
-        isInputActive == Field.allCases.first
-    }
-    
-    enum Field: Int, Hashable, CaseIterable {
-        case red, green, blue
-    }
     
     var body: some View {
         ZStack{
             Color(.gray).opacity(0.2).ignoresSafeArea()
+                .onTapGesture {
+                    isInputActive = nil
+                }
+            
             VStack(spacing: 20) {
-                ColorizedView(red: sliderValueRed / 255, green: sliderValueGreen / 255, blue: sliderValueBlue / 255)
+                ColorizedView(red: red, green: green, blue: blue)
                 
-                HStack{
-                    VStack {
-                        LabelAndSliderView(sliderValue: $sliderValueRed, color: .red)
-                        LabelAndSliderView(sliderValue: $sliderValueGreen, color: .green)
-                        LabelAndSliderView(sliderValue: $sliderValueBlue, color: .blue)
-                    }
-                    
-                    VStack {
-                        TextFieldView(text: $sliderValueRed)
-                            .focused($isInputActive, equals: .red)
-                        TextFieldView(text: $sliderValueGreen)
-                            .focused($isInputActive, equals: .green)
-                        TextFieldView(text: $sliderValueBlue)
-                            .focused($isInputActive, equals: .blue)
-                    }
-                    .toolbar{
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Button(action: previous) {
-                                Image(systemName: "chevron.up")
-                            }
-                            .disabled(hasReachedStart)
-                            
-                            Button(action: next) {
-                                Image(systemName: "chevron.down")
-                            }
-                            .disabled(hasReachedEnd)
-                            
-                            Spacer()
-                            
-                            Button("Done", action: checkValue)
-                                .alert("Worning", isPresented: $showAlert, actions: {}) {
-                                    Text("Please enter value from 0 to 255")
-                                }
+                VStack {
+                    LabelAndSliderView(value: $red, color: .red)
+                        .focused($isInputActive, equals: .red)
+                    LabelAndSliderView(value: $green, color: .green)
+                        .focused($isInputActive, equals: .green)
+                    LabelAndSliderView(value: $blue, color: .blue)
+                        .focused($isInputActive, equals: .blue)
+                }
+                .toolbar{
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Button(action: previous) {
+                            Image(systemName: "chevron.up")
+                        }
+                        
+                        Button(action: next) {
+                            Image(systemName: "chevron.down")
+                        }
+                        
+                        Spacer()
+                        
+                        Button("Done") {
+                            isInputActive = nil
                         }
                     }
                 }
-                
                 Spacer()
             }
-            
             .padding()
         }
         
     }
     
-    private func checkValue() {
-        if sliderValueRed > 255 || sliderValueRed < 0 {
-            showAlert = true
-            sliderValueRed = 0
+}
 
-        }
-        if sliderValueGreen > 255 || sliderValueGreen < 0 {
-            showAlert = true
-            sliderValueGreen = 0.0
-
-        }
-        if sliderValueBlue > 255 || sliderValueBlue < 0 {
-            showAlert = true
-            sliderValueBlue = 0
-
-        }
-        
-        isInputActive = nil
-    }
+extension ContentView {
     
-
+    enum Field {
+        case red, green, blue
+    }
     private func next () {
-        guard let currentInput = isInputActive,
-              let lastIndex = Field.allCases.last?.rawValue else { return }
-        
-        let index = min(currentInput.rawValue + 1, lastIndex)
-        isInputActive = Field(rawValue: index)
-        
+        switch isInputActive {
+        case .red:
+            isInputActive = .green
+        case .green:
+            isInputActive = .blue
+        case .blue:
+            isInputActive = .red
+        case .none:
+            isInputActive = nil
+        }
     }
     
     private func previous() {
-        guard let currentInput = isInputActive,
-              let firstIndex = Field.allCases.first?.rawValue else { return }
-        
-        let index = min(currentInput.rawValue - 1, firstIndex)
-        isInputActive = Field(rawValue: index)
+        switch isInputActive {
+        case .red:
+            isInputActive = .blue
+        case .green:
+            isInputActive = .red
+        case .blue:
+            isInputActive = .green
+        case .none:
+            isInputActive = nil
+        }
     }
-
-
+    
+    
+    
 }
-
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

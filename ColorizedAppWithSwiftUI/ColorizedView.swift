@@ -14,7 +14,7 @@ struct ColorizedView: View {
     let blue: Double
     
     var body: some View {
-        Color(red: red, green: green, blue: blue)
+        Color(red: red / 255, green: green / 255, blue: blue / 255)
             .frame(width: 343, height: 128)
             .cornerRadius(20)
             .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -24,6 +24,6 @@ struct ColorizedView: View {
 
 struct ColorizedView_Previews: PreviewProvider {
     static var previews: some View {
-        ColorizedView(red: 0.88, green: 0.22, blue: 1)
+        ColorizedView(red: 255, green: 22, blue: 100)
     }
 }
